@@ -307,11 +307,20 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         $file_name = $_FILES['evdupload']['name'];
         $file_tmp = $_FILES['evdupload']['tmp_name'];
         // Move uploaded file to desired directory
-        $upload_directory = 'uploads/'; // Change this to your desired directory
+        $upload_directory = 'uploads/'; 
+
+    //cheking if dir. to store files is available if not it is being created
+        if (!is_dir($upload_directory)) {
+        // Create the directory with permissions 0755
+        if (!mkdir($upload_directory, 0755, true)) {
+            die("Failed to create directory '$upload_directory'");
+        }
+        }
+
         $destination = $upload_directory . $file_name;
         if(move_uploaded_file($file_tmp, $destination)) {
             // File uploaded successfully
-            // You can save $destination to your database if you need to store the file path
+            // we can save $destination to your database if you need to store the file path
             echo '<script>alert("File uploaded successfully")</script>';
         } else {
             echo "Error uploading file.";
